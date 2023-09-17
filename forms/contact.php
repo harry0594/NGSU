@@ -1,54 +1,38 @@
 <?php
-//Import PHPMailer classes into the global namespace
-//These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-require 'PHPMailer/src/OAuth.php';
-
-$name = htmlentities($_POST['name']);
-$email = htmlentities($_POST['email']);
-$subject = htmlentities($_POST['subject']);
-$message = htmlentities($_POST['message']);
-
-//Create an instance; passing `true` enables exceptions
-$mail = new PHPMailer(true);
-
-try {
-    //Server settings
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-    $mail->isSMTP();                                            //Send using SMTP
-    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-    $mail->Username   = 'hariatrry123@gmail.com';                     //SMTP username
-    $mail->Password   = 'vcssbenygkfnhzkb';                               //SMTP password
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption
-    $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-    //Recipients
-    $mail->setFrom($email, $name);
-    $mail->addAddress('hariatrry123@gmail.com', 'hari');     //Add a recipient
-    $mail->addAddress('ellen@example.com');               //Name is optional for multiple recepient
-    $mail->addReplyTo($email, $name);
-    // $mail->addCC('cc@example.com');
-    // $mail->addBCC('bcc@example.com');
-
-    //Attachments
-    // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-    // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-    //Content
-    $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = $subject;
-    $mail->Body    = $message;
-    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-    $mail->send();
-    echo 'Message has been sent';
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+// getting all values from the HTML form
+if (isset($_POST['submit'])) {
+    $name =  $_POST['name'];
+    $email = $_POST['email'];
+    $subject =  $_POST['subject'];
+    $message = $_POST['message'];
 }
+
+// database details
+$servername = 'md-in-49';
+$username = 'memumgmk_ngsu';
+$password = 'Ngsu@1234*';
+$dbname = 'memumgmk_ngsu';
+
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn === false) {
+    die("ERROR: Could not connect. "
+        . mysqli_connect_error());
+}
+
+// Performing insert query execution
+// here our table name is member_query
+$sql = "INSERT INTO member_query  VALUES ('$name',
+            '$email','$subject','$message')";
+
+if (mysqli_query($conn, $sql)) {
+    echo "<h3>Your message has been sent to us.</h3>";
+} else {
+    echo "ERROR: Hush! Sorry $sql. "
+        . mysqli_error($conn);
+}
+
+// Close connection
+mysqli_close($conn);
