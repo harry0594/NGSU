@@ -9,10 +9,10 @@ if (isset($_POST['submit'])) {
 }
 
 // database details
-$servername = 'md-in-49';
-$username = 'memumgmk_ngsu';
-$password = 'Ngsu@1234*';
-$dbname = 'memumgmk_ngsu';
+$servername = 'localhost';
+$username = 'root';
+$password = '';
+$dbname = 'dbname';
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
